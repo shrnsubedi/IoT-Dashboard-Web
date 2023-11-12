@@ -1,6 +1,57 @@
 {% extends 'dashboard/base.html' %} {% block content %}
+<script>
+    $(document).ready(function () {
+        // Define an array of room names
+        let roomNames = ['ROOM201', 'ROOM202'];
+
+        function updateSensorData(roomName) {
+            $.ajax({
+                url: '/get_latest_readings/',
+                type: 'GET',
+                data: {'room_name': roomName},
+                success: function (data) {
+                    if ('error' in data) {
+                        console.error('Error:', data.error);
+                    } else {
+                        // Loop through the received data and update the display
+                        sensorNames = Object.keys(data);
+                        sensorNames.forEach((sensorName) => {
+                            var sensorInfo = data[sensorName];
+                            var displayId = sensorName + '-display-' + roomName;
+                            $('#' + displayId).text(sensorInfo.value + ' ' + sensorName);
+                        })
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+
+        // Set interval for each room
+        roomNames.forEach((name) => {
+            console.log(name);
+            // Initial call
+            updateSensorData(name);
+
+            // Set interval to update every 30 seconds for each room
+            setInterval(function (name) {
+                updateSensorData(name);
+            }, 30000, name);
+        });
+
+    });
+</script>
+
 <div>
-    <p>Room 1</p>
-    <p>Temp:</p>
+    {% for roomName in room_names %}
+        <div>
+            <h2>{{ roomName }}</h2>
+            {% for sensorName in sensor_names %}
+                <p id="{{ sensorName }}-display-{{ roomName }}">Loading...</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
 </div>
+
 {% endblock content %}
