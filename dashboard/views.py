@@ -16,6 +16,7 @@ class LandingPageView(generic.TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["room_names"] = [room.name for room in Room.objects.all()]
+        context["sensor_names"] = [sensor.name for sensor in Sensor.objects.all()]
         return context
 
 class LatestSensorDataView(View):
@@ -37,7 +38,6 @@ class LatestSensorDataView(View):
                     'value': latest_reading.value,
                     'timestamp': latest_reading.time.strftime('%Y-%m-%d %H:%M:%S'),
                 }
-        print(sensor_data)
         if sensor_data:
             return JsonResponse(sensor_data)
         else:

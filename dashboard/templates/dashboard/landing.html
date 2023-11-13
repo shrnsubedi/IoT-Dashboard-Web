@@ -30,7 +30,6 @@
 
         // Set interval for each room
         roomNames.forEach((name) => {
-            console.log(name);
             // Initial call
             updateSensorData(name);
 
@@ -49,6 +48,7 @@
             <h2>{{ roomName }}</h2>
             {% for sensorName in sensor_names %}
                 <p id="{{ sensorName }}-display-{{ roomName }}">Loading...</p>
+                <p id="timestamp-{{ sensorName }}-display-{{ roomName }}"></p>
             {% endfor %}
         </div>
     {% endfor %}

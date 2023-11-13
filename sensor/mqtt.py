@@ -2,18 +2,20 @@ import paho.mqtt.client as mqtt
 import json
 
 from django.conf import settings
-from sensor.models import Sensor, SensorReading
+from sensor.models import Sensor, SensorReading, Room
 
 def parse_message(msg):
     time = msg["time"]
     value = msg["value"]
     sensor_name = msg["sensor"]
-    return time, value, sensor_name
+    room_name = msg["room"]
+    return time, value, sensor_name, room_name
 
 def create_reading(msg):
-    time, value, sensor_name= parse_message(msg)
-    sensor = Sensor.objects.filter(name = sensor_name).first()
-    return SensorReading.objects.create(time=time, value=value, sensor=sensor)
+    time, value, sensor_name, room_name = parse_message(msg)
+    sensor = Sensor.objects.filter(name=sensor_name).first()
+    room = Room.objects.filter(name=room_name).first()
+    return SensorReading.objects.create(time=time, value=value, sensor=sensor, room=room)
 
 def on_connect(mqtt_client, userdata, flags, rc):
     if rc == 0:
