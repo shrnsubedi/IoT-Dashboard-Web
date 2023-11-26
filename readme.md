@@ -64,6 +64,13 @@ IoT dashboard is a...
 
        Set a random string as secret key
         SECRET_KEY=<random-string>
+
+       Set the details for an MQTT Server, recommended to use cloud for Debug
+        MQTT_SERVER = "broker.emqx.io"
+        MQTT_PORT = 1883
+        MQTT_KEEPALIVE = 60
+        MQTT_USER = ""
+        MQTT_PASSWORD = ""
    ```
 
 <br/>

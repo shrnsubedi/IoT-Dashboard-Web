@@ -140,11 +140,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.User"
 
 # MQTT Configuration
-MQTT_SERVER = "broker.emqx.io"
-MQTT_PORT = 1883
-MQTT_KEEPALIVE = 60
-MQTT_USER = ""
-MQTT_PASSWORD = ""
+MQTT_SERVER = env("MQTT_SERVER"), "broker.emqx.io"
+MQTT_PORT = env("MQTT_PORT"), 1883
+MQTT_KEEPALIVE = env("MQTT_KEEPALIVE"), 60
+MQTT_USER = env("MQTT_USER")
+MQTT_PASSWORD = env("MQTT_USER")
 
 LOGIN_REDIRECT_URL = "dashboard-landing_page"
 LOGOUT_REDIRECT_URL = "dashboard-landing_page"
