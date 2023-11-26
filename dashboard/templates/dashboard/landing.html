@@ -1,25 +1,48 @@
 {% extends 'dashboard/base.html' %} {% block content %}
 <script>
     $(document).ready(function () {
-        // Define an array of room names
-        let roomNames = ['ROOM201', 'ROOM202'];
 
-        function updateSensorData(roomName) {
+        function updateSensorData(allSensorData){
+            // Loop through the received data and update the display
+            roomNames = Object.keys(allSensorData);
+            roomNames.forEach((roomName) => {
+                readings = allSensorData[roomName]
+                sensorNames = Object.keys(readings);
+                sensorNames.forEach((sensorName) => {
+                    var sensorInfo = readings[sensorName];
+                    var displayId = sensorName + '-display-' + roomName;
+                    $('#' + displayId).text(sensorInfo.value + ' ' + sensorName);
+                });
+            });
+        }[
+        {
+            "room": "ROOM202",
+            "score": 16
+        },
+        {
+            "room": "ROOM201",
+            "score": 19
+        }
+    ]
+
+        function updateRoomRanking(roomRankings){
+            $('#room-rankings').empty();
+            roomRankings.forEach((rank, index) => {
+                $('#room-rankings').append('<p>' + (index + 1) + '. ' + rank.room + '</p>');
+            });
+        }
+
+        function refreshDashboard() {
             $.ajax({
-                url: '/get_latest_readings/',
+                url: '/get_dashboard_data/',
                 type: 'GET',
-                data: {'room_name': roomName},
                 success: function (data) {
+                    console.log(data);
                     if ('error' in data) {
                         console.error('Error:', data.error);
                     } else {
-                        // Loop through the received data and update the display
-                        sensorNames = Object.keys(data);
-                        sensorNames.forEach((sensorName) => {
-                            var sensorInfo = data[sensorName];
-                            var displayId = sensorName + '-display-' + roomName;
-                            $('#' + displayId).text(sensorInfo.value + ' ' + sensorName);
-                        })
+                        updateSensorData(data["sensorData"]);
+                        updateRoomRanking(data["rankingData"]);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -27,19 +50,16 @@
                 }
             });
         }
+    // Initial call
+    refreshDashboard();
 
-        // Set interval for each room
-        roomNames.forEach((name) => {
-            // Initial call
-            updateSensorData(name);
-
-            // Set interval to update every 30 seconds for each room
-            setInterval(function (name) {
-                updateSensorData(name);
-            }, 30000, name);
-        });
-
+    // Set interval to update every 30 seconds for each room
+    setInterval(function () {
+        refreshDashboard();
+    }, 30000);
     });
+
+
 </script>
 
 <div>
@@ -52,6 +72,12 @@
             {% endfor %}
         </div>
     {% endfor %}
+</div>
+
+<div>
+    <h1>Room Rankings:</h1>
+    <div id="room-rankings">
+    </div>
 </div>
 
 {% endblock content %}

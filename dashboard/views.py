@@ -1,17 +1,17 @@
-from django.utils import timezone
-from datetime import timedelta
-
 from typing import Any
 from django.views import generic
-from django.http import JsonResponse
-from django.views import View
 
-from sensor.models import Sensor, SensorReading, Room
+from django.views import View
+from django.http import JsonResponse
+
+from sensor.models import Sensor, Room
+from sensor.utils import get_latest_readings, get_room_rankings
 
 # Create your views here.
 
-class LandingPageView(generic.TemplateView):
-    template_name="dashboard/landing.html"
+
+class DashboardDataView(generic.TemplateView):
+    template_name = "dashboard/landing.html"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -19,26 +19,14 @@ class LandingPageView(generic.TemplateView):
         context["sensor_names"] = [sensor.name for sensor in Sensor.objects.all()]
         return context
 
-class LatestSensorDataView(View):
+
+class DashboardDataAPI(View):
     def get(self, request, *args, **kwargs):
-        room_name = request.GET.get('room_name')
-        room = Room.objects.get(name=room_name)
-        
-        sensors = Sensor.objects.all()
-
-        sensor_data = {}
-
-        for sensor in sensors:
-            latest_reading = SensorReading.objects.filter(
-                room=room, sensor=sensor
-            ).order_by('-time').first()
-
-            if latest_reading:
-                sensor_data[sensor.name] = {
-                    'value': latest_reading.value,
-                    'timestamp': latest_reading.time.strftime('%Y-%m-%d %H:%M:%S'),
-                }
-        if sensor_data:
-            return JsonResponse(sensor_data)
+        sensor_data = get_latest_readings()
+        rankings = get_room_rankings(sensor_data)
+        if sensor_data and rankings:
+            return JsonResponse({"sensorData": sensor_data, "rankingData": rankings})
         else:
-            return JsonResponse({'error': 'No data available for the specified room'}, status=400)
+            return JsonResponse(
+                {"error": "No data available for the specified room"}, status=400
+            )

@@ -1,6 +1,11 @@
 from django.urls import path
-from dashboard.views import LandingPageView, LatestSensorDataView
+from dashboard.views import DashboardDataView, DashboardDataAPI
+
 urlpatterns = [
-    path("", LandingPageView.as_view(), name="dashboard-landing_page"),
-    path("get_latest_readings/", LatestSensorDataView.as_view(), name="dashboard-latest-readings")
+    path("", DashboardDataView.as_view(), name="dashboard-landing_page"),
+    path(
+        "get_dashboard_data/",
+        DashboardDataAPI.as_view(),
+        name="dashboard-latest-readings",
+    ),
 ]
