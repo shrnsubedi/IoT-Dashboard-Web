@@ -1,0 +1,107 @@
+{% extends 'dashboard/base.html' %} {% block content %}
+<h1> Preferences </h1>
+<div class="container mt-4">
+    <h2 class="mb-4">Set Preferences</h2>
+    <form method="post" id="preferencesForm">
+
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label for="temperature">Temperature Value:</label>
+          <input type="number" class="form-control" id="temperature" name="temperature" step="any" value="{{ initial_data.Temperature.0 }}">
+          <small class="form-text text-muted">Enter the value for Temperature.</small>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="temperature_importance">How important is Temperature to you?</label>
+          <select class="form-control" id="temperature_importance" name="temperature_importance">
+            <option value="0" {% if initial_data.Temperature.1 == 0 %}selected{% endif %}>Not Important</option>
+            <option value="1" {% if initial_data.Temperature.1 == 1 %}selected{% endif %}>Neutral</option>
+            <option value="2" {% if initial_data.Temperature.1 == 2 %}selected{% endif %}>Very Important</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label for="humidity">Humidity Value:</label>
+          <input type="number" class="form-control" id="humidity" name="humidity" step="any" value="{{ initial_data.Humidity.0 }}">
+          <small class="form-text text-muted">Enter the value for Humidity.</small>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="humidity_importance">How important is Humidity to you?</label>
+          <select class="form-control" id="humidity_importance" name="humidity_importance">
+            <option value="0" {% if initial_data.Humidity.1 == 0 %}selected{% endif %}>Not Important</option>
+            <option value="1" {% if initial_data.Humidity.1 == 1 %}selected{% endif %}>Neutral</option>
+            <option value="2" {% if initial_data.Humidity.1 == 2 %}selected{% endif %}>Very Important</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label for="light">Light Value:</label>
+          <select class="form-control" id="light" name="light">
+            <option value="0" {% if initial_data.Light.0 == 0 %}selected{% endif %}>Dim (0-9 Lumen)</option>
+            <option value="1" {% if initial_data.Light.0 == 1 %}selected{% endif %}>Bright (10-20 Lumen)</option>
+          </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="light_importance">How important is Light to you?</label>
+          <select class="form-control" id="light_importance" name="light_importance">
+            <option value="0" {% if initial_data.Light.1 == 0 %}selected{% endif %}>Not Important</option>
+            <option value="1" {% if initial_data.Light.1 == 1 %}selected{% endif %}>Neutral</option>
+            <option value="2" {% if initial_data.Light.1 == 2 %}selected{% endif %}>Very Important</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="savePreferences()">Save Preferences</button>
+    </form>
+</div>
+
+  <script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function savePreferences() {
+        const csrftoken = getCookie('csrftoken');
+
+        let formData = {
+            Temperature: [parseFloat($('#temperature').val()), parseInt($('#temperature_importance').val())],
+            Humidity: [parseFloat($('#humidity').val()), parseInt($('#humidity_importance').val())],
+            Light: [parseInt($('#light').val()), parseInt($('#light_importance').val())],
+        };
+
+        $.ajax({
+            url: '/preferences/',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function(response) {
+                window.location.href = '/';
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+
+{% endblock content %}

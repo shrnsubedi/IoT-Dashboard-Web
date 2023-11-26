@@ -1,1 +1,2 @@
 paho-mqtt==1.6.1
+django4-background-tasks==1.2.9

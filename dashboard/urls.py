@@ -1,5 +1,6 @@
 from django.urls import path
-from dashboard.views import DashboardDataView, DashboardDataAPI
+
+from dashboard.views import DashboardDataAPI, DashboardDataView, PreferencesView
 
 urlpatterns = [
     path("", DashboardDataView.as_view(), name="dashboard-landing_page"),
@@ -8,4 +9,5 @@ urlpatterns = [
         DashboardDataAPI.as_view(),
         name="dashboard-latest-readings",
     ),
+    path("preferences/", PreferencesView.as_view(), name="preferences"),
 ]

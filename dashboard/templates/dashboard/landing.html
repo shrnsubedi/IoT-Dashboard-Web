@@ -11,7 +11,7 @@
                 sensorNames.forEach((sensorName) => {
                     var sensorInfo = readings[sensorName];
                     var displayId = sensorName + '-display-' + roomName;
-                    $('#' + displayId).text(sensorInfo.value + ' ' + sensorName);
+                    $('#' + displayId).text(sensorInfo.value);
                 });
             });
         }[
@@ -26,6 +26,10 @@
     ]
 
         function updateRoomRanking(roomRankings){
+            if (roomRankings === null){
+                $('#room-rankings').text("Please set your preferences to get room rankings")
+                return
+            }
             $('#room-rankings').empty();
             roomRankings.forEach((rank, index) => {
                 $('#room-rankings').append('<p>' + (index + 1) + '. ' + rank.room + '</p>');
@@ -37,7 +41,6 @@
                 url: '/get_dashboard_data/',
                 type: 'GET',
                 success: function (data) {
-                    console.log(data);
                     if ('error' in data) {
                         console.error('Error:', data.error);
                     } else {
@@ -66,10 +69,8 @@
     {% for roomName in room_names %}
         <div>
             <h2>{{ roomName }}</h2>
-            {% for sensorName in sensor_names %}
-                <p id="{{ sensorName }}-display-{{ roomName }}">Loading...</p>
-                <p id="timestamp-{{ sensorName }}-display-{{ roomName }}"></p>
-            {% endfor %}
+            <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-{{ roomName }}">Loading...</span></p>
+            <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-{{ roomName }}">Loading...</span></p>
         </div>
     {% endfor %}
 </div>
