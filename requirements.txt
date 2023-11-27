@@ -1,2 +1,5 @@
+django==4.1.12
+python-environ==0.4.54
+psycopg2==2.9.9
 paho-mqtt==1.6.1
 django4-background-tasks==1.2.9

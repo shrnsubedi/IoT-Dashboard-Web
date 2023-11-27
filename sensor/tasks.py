@@ -16,11 +16,8 @@ def monitor_sensor_status():
     for sensor in sensors:
         last_reading = sensor.sensor_reading.latest("time")
         time_difference = current_time - last_reading.time
-
-        # Update is_alive based on time difference
         sensor.is_alive = time_difference <= timedelta(minutes=5)
 
-    # Batch update all sensors
     Sensor.objects.bulk_update(sensors, ["is_alive"])
 
 
