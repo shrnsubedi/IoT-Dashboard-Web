@@ -9,8 +9,8 @@
                 readings = allSensorData[roomName]
                 sensorNames = Object.keys(readings);
                 sensorNames.forEach((sensorName) => {
-                    var sensorInfo = readings[sensorName];
-                    var displayId = sensorName + '-display-' + roomName;
+                    let sensorInfo = readings[sensorName];
+                    let displayId = sensorName + '-display-' + roomName;
                     $('#' + displayId).text(sensorInfo.value);
                 });
             });

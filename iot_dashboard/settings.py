@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -140,9 +141,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.User"
 
 # MQTT Configuration
-MQTT_SERVER = env("MQTT_SERVER"), "broker.emqx.io"
-MQTT_PORT = env("MQTT_PORT"), 1883
-MQTT_KEEPALIVE = env("MQTT_KEEPALIVE"), 60
+MQTT_SERVER = env("MQTT_SERVER")
+MQTT_PORT = env.int("MQTT_PORT")
+MQTT_KEEPALIVE = env.int("MQTT_KEEPALIVE")
 MQTT_USER = env("MQTT_USER")
 MQTT_PASSWORD = env("MQTT_USER")
 
