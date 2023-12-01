@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 
 User = get_user_model()
@@ -25,10 +26,7 @@ class Sensor(models.Model):
 
 
 class SensorReading(models.Model):
-    class Meta:
-        unique_together = (("sensor", "time"),)
-
-    time = models.DateTimeField(primary_key=True, default=datetime.now)
+    time = models.DateTimeField(default=datetime.now)
     sensor = models.ForeignKey(
         Sensor, on_delete=models.CASCADE, related_name="sensor_reading"
     )
@@ -36,6 +34,18 @@ class SensorReading(models.Model):
 
     def __str__(self) -> str:
         return f"{self.sensor}-{self.time}"
+
+    def validate_unique(self, exclude=None):
+        qs = SensorReading.objects.filter(sensor=self.sensor, time=self.time)
+        if qs.exists():
+            raise ValidationError(
+                "Sensor Reading with this sensor and time already exists."
+            )
+        super().validate_unique(exclude)
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(SensorReading, self).save(*args, **kwargs)
 
 
 class Preferences(models.Model):

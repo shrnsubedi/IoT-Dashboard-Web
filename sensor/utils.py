@@ -35,13 +35,17 @@ def get_room_rankings(latest_readings, user):
         return None
 
     preferences = preferences_obj.value
+
+    if not preferences:
+        return None
+
     sensor_names = preferences.keys()
 
     room_rankings = []
 
     for room_name, room_data in latest_readings.items():
         score = sum(
-            abs(room_data[sensor_name]["value"] - preferences[sensor_name][0])
+            abs(1 - room_data[sensor_name]["value"] / preferences[sensor_name][0])
             * preferences[sensor_name][1]
             for sensor_name in sensor_names
             if sensor_name in room_data
