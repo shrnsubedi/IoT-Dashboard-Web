@@ -60,26 +60,50 @@
 
 
 </script>
+
 <div class="container">
     <div class="row">
-        <div class="col-3 col-md-3 border rounded">
-            Date:
+        <div class="col-sm-3">
+            <div class="card border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header">Date</div>
+                <div class="card-body text-dark">
+                  <p class="card-text">{{today_date}}</p>
+                </div>
+              </div>
         </div>
-        <div class="col-3 col-md-3 border rounded">
-            Average Temperature:
+
+        <div class="col-sm-3">
+            <div class="card border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header">Temperature Outside</div>
+                <div class="card-body text-dark">
+                  <p class="card-text">10C</p>
+                </div>
+              </div>
         </div>
-        <div class="col-3 col-md-3 border rounded">
-            Humidity:
+
+        <div class="col-sm-3">
+            <div class="card border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header">Humidity</div>
+                <div class="card-body text-dark">
+                  <p class="card-text">10C</p>
+                </div>
+              </div>
         </div>
-        <div class="col-3 col-md-3 border rounded">
-            Humidity:
+
+        <div class="col-sm-3">
+            <div class="card border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header">Average Temperature</div>
+                <div class="card-body text-dark">
+                  <p class="card-text">10C</p>
+                </div>
+              </div>
         </div>
-    </div>
+      </div>
 </div>
 
 <div class="container">
-    <div class="row gx-5">
-        <div class="container col-3 col-md-9 mr-1">
+    <div class="row">
+        <div class="container col-3 col-md-10 border border-3 border-dark rounded-3">
             <div class="row">
                 <div class="col-3 col-md-3 class-room-available border border-dark rounded">
                     <p>AIP S108</p>
@@ -135,7 +159,7 @@
                 </div>
             </div>
         </div>
-        <div class="container col-3 col-md-2 border rounded">
+        <div class="container col-3 col-md-2 border border-3 border-dark rounded-3">
             <h2>Your <i id="ranking-animation" class="fa-solid fa-ranking-star" style="color: #0d0e07;"></i></h2><span>
             <div id="room-rankings">
             </div>
