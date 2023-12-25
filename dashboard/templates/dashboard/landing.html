@@ -1,4 +1,5 @@
 {% extends 'dashboard/base.html' %} {% block content %}
+{% load static %}
 <script>
     $(document).ready(function () {
 
@@ -58,6 +59,21 @@
     }, 30000);
     });
 
+    function toggleMap() {
+        let pictureMap = document.getElementById("picture-map");
+        let drawnMap = document.getElementById("drawn-map");
+
+        if (pictureMap.style.display === 'none' || pictureMap.style.display === '') {
+            pictureMap.style.display = 'block';
+            drawnMap.style.display = 'none';
+        } else {
+            pictureMap.style.display = 'none';
+            drawnMap.style.display = 'block';
+        }
+    }
+    </script>
+
+
 
 </script>
 
@@ -92,9 +108,9 @@
 
         <div class="col-sm-3">
             <div class="card border-dark mb-3" style="max-width: 18rem;">
-                <div class="card-header">Average Temperature</div>
+                <div class="card-header">Map View</div>
                 <div class="card-body text-dark">
-                  <p class="card-text">10C</p>
+                    <span id="map-flipper" onclick="toggleMap()" class="text-right"><i class="fa-solid fa-rotate-right"></i></span>
                 </div>
               </div>
         </div>
@@ -103,60 +119,67 @@
 
 <div class="container">
     <div class="row">
-        <div class="container col-3 col-md-10 border border-3 border-dark rounded-3">
-            <div class="row">
-                <div class="col-3 col-md-3 class-room-available border border-dark rounded">
-                    <p>AIP S108</p>
-                    <hr>
-                    <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S108">Loading...</span></p>
-                    <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-AIP_S108">Loading...</span></p>
-                </div>
-                <div class="col-3 col-md-3 class-room-available border border-dark rounded"></div>
-                <div class="col-3 col-md-3 class-room-available border border-dark rounded"></div>
-                <div class="col-3 col-md-3 border-left border-top border-right border-dark text-right help-text font-weight-bold hallway rounded"> Entrance</div>
-            </div>
-
-            <div class="row">
-                <div class="col-3 col-md-2 class-room-available border border-dark rounded">
-                    <p>ROOM202</p>
-                    <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-ROOM202">Loading...</span></p>
-                    <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-ROOM202">Loading...</span></p>
-                </div>
-                <div class="col-3 col-md-2 hallway"></div>
-                <div class="col-3 col-md-8 hallway">
-                    <div class="row h-50">
-                        <div class="col-3 col-md-12 help-text font-weight-bold hallway border-right border-dark rounded">Hallway</div>
+        <div id="map-container" class="container col-3 col-md-10 border border-3 border-dark rounded-3">
+            <div id="drawn-map">
+                <div class="row">
+                    <div class="col-3 col-md-3 class-room-available border border-dark rounded">
+                        <p>AIP S108</p>
+                        <hr>
+                        <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S108">Loading...</span></p>
+                        <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-AIP_S108">Loading...</span></p>
                     </div>
-                    <div class="row h-50">
-                        <div class="col-3 col-md-3 class-room-available border border-dark rounded"></div>
-                        <div class="col-3 col-md-3 outside border-top border-dark rounded"></div>
-                        <div class="col-3 col-md-6 bg-white border-left border-right border-dark rounded">
-                            <div class="row h-100">
-                                <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
-                                <div class="col-3 col-md-2 hallway"></div>
-                                <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
+                    <div class="col-3 col-md-3 class-room-available border border-dark rounded"></div>
+                    <div class="col-3 col-md-3 class-room-available border border-dark rounded"></div>
+                    <div class="col-3 col-md-3 border-left border-top border-right border-dark text-right help-text font-weight-bold hallway rounded">
+                        Entrance
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3 col-md-2 class-room-available border border-dark rounded">
+                        <p>ROOM202</p>
+                        <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-ROOM202">Loading...</span></p>
+                        <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-ROOM202">Loading...</span></p>
+                    </div>
+                    <div class="col-3 col-md-2 hallway"></div>
+                    <div class="col-3 col-md-8 hallway">
+                        <div class="row h-50">
+                            <div class="col-3 col-md-12 help-text font-weight-bold hallway border-right border-dark rounded">Hallway</div>
+                        </div>
+                        <div class="row h-50">
+                            <div class="col-3 col-md-3 class-room-available border border-dark rounded"></div>
+                            <div class="col-3 col-md-3 outside border-top border-dark rounded"></div>
+                            <div class="col-3 col-md-6 bg-white border-left border-right border-dark rounded">
+                                <div class="row h-100">
+                                    <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
+                                    <div class="col-3 col-md-2 hallway"></div>
+                                    <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-3 col-md-2 class-room-available border border-round border-dark rounded">
-                    <p>ROOM201</p>
-                    <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-ROOM201">Loading...</span></p>
-                    <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-ROOM201">Loading...</span></p>
-                </div>
-                <div class="col-3 col-md-2 class-room-available border border-dark rounded"></div>
-                <div class="col-3 col-md-2 class-room-available border border-dark rounded"></div>
-                <div class="col-3 col-md-2 outside"></div>
-                <div class="col-3 col-md-4 bg-white border-left border-bottom border-right border-dark rounded">
-                    <div class="row h-100">
-                        <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
-                        <div class="col-3 col-md-2 hallway"></div>
-                        <div class="col-3 col-md-5 class-room-available border border-dark rounded"></div>
+                <div class="row">
+                    <div class="col-3 col-md-2 class-room-available border border-round border-dark rounded">
+                        <p>ROOM201</p>
+                        <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-ROOM201">Loading...</span></p>
+                        <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-ROOM201">Loading...</span></p>
+                    </div>
+                    <div class="col-3 col-md-2 class-room-available border border-dark rounded"></div>
+                    <div class="col-3 col-md-2 class-room-available border border-dark rounded"></div>
+                    <div class="col-3 col-md-2 outside"></div>
+                    <div class="col-3 col-md-4 bg-white border-left border-bottom border-right border-dark rounded">
+                        <div class="row h-100">
+                            <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
+                            <div class="col-3 col-md-2 hallway"></div>
+                            <div class="col-3 col-md-5 class-room-available border border-dark rounded"></div>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div id="picture-map">
+                <img class="img-fluid" src={% static 'dashboard/images/floor_plan.jpeg' %} alt="Avatar">
             </div>
         </div>
         <div class="container col-3 col-md-2 border border-3 border-dark rounded-3">
