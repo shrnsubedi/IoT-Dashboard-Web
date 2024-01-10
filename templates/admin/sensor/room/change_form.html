@@ -9,7 +9,36 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
 
-    <hr/>
+    <br/>
+    <div class="container">
+      <table id="result_list" style="width:100%;">
+        <thead>
+            <tr>
+                <th scope="col" class="sortable column-name">Name</th>
+                <th scope="col" class="sortable column-is_active">Active</th>
+                <th scope="col" class="sortable column-is_alive">Is Alive</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in sensors %}
+                <tr class="{% cycle 'row1' 'row2' %}">
+                    <td class="field-name" style="font-weight: bold;">
+                        <a href="{% url 'admin:sensor_sensor_change' obj.id %}">{{ obj.name }}</a>
+                    </td>
+                    <td class="field-is_active">{% if obj.is_active %}&#10004;{% else %}&#10008;{% endif %}</td>
+                    <td class="field-is_alive">{% if obj.is_alive %}&#10004;{% else %}&#10008;{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No sensors found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <br/>
+
     <div class="module">
         <h2>Temperature Chart</h2>
         <canvas id="temperatureChart" width="800" height="200"></canvas>

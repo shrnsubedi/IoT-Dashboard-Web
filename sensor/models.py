@@ -17,7 +17,7 @@ class Room(models.Model):
 
 class Sensor(models.Model):
     name = models.CharField(max_length=50)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="sensors")
     is_active = models.BooleanField(default=True)
     is_alive = models.BooleanField(default=True)
 

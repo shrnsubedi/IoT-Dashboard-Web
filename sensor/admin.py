@@ -17,9 +17,11 @@ class RoomAdmin(admin.ModelAdmin):
     def change_view(self, request, object_id, form_url="", extra_context=None):
         room_instance = self.get_object(request, object_id)
         chart_data = self.get_temperature_data(room_instance)
+        sensors_list = room_instance.sensors.all()
 
         extra_context = extra_context or {}
         extra_context["temperature_data"] = chart_data
+        extra_context["sensors"] = sensors_list
 
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context
