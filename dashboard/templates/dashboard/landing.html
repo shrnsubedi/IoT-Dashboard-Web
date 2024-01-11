@@ -2,18 +2,34 @@
 {% load static %}
 <script>
     $(document).ready(function () {
-        function getSoundMapping(value){
-            if(value >= 30 && value <= 50) {
-                return "❚❚"
+        // Too allow popover
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+
+        $(function(){
+            $("[data-bs-toggle=popover-aipS102]").popover({
+                html : true,
+                content: function() {
+                  var content = $(this).attr("data-popover-content");
+                  return $(content).html()
+                }
+            });
+        });
+
+        function getSensorValueMapping(name, value){
+            if(name === "Sound"){
+                return value + "dB"
             }
-            else if (value > 50 && value <= 70 ){
-                return "❚❚❚❚"
+            if(name === "Light"){
+                return getLightMapping(value)
             }
-            else if (value > 70){
-                return "❚❚❚❚❚❚"
+            if(name === "Temperature"){
+                return value + "°C"
             }
-            else{
-                return "N/A"
+            if(name === "Humidity"){
+                return value + "%"
             }
         }
 
@@ -21,14 +37,8 @@
             if(value >= 0 && value <= 300) {
                 return "Dim"
             }
-            else if (value >= 301 && value <= 500 ){
-                return "Ideal"
-            }
-            else if (value >= 501){
+            else if (value >= 301){
                 return "Bright"
-            }
-            else{
-                return "N/A"
             }
         }
 
@@ -41,17 +51,10 @@
                 sensorNames.forEach((sensorName) => {
                     let sensorInfo = readings[sensorName];
                     let sensorValue = sensorInfo.value
-
-                    if(sensorName === "Sound"){
-                        sensorValue = getSoundMapping(sensorValue)
-                    }
-
-                    if(sensorName === "Light"){
-                        sensorValue = getLightMapping(sensorValue)
-                    }
+                    mappedSensorValue = getSensorValueMapping(sensorName,sensorValue)
 
                     let displayId = sensorName + '-display-' + roomName;
-                    $('#' + displayId).text(sensorValue);
+                    $('#' + displayId).text(mappedSensorValue);
                 });
             });
         }
@@ -129,7 +132,7 @@
         <div id="map-container" class="container col-3 col-md-10 border border-3 border-dark rounded-3">
             <div id="drawn-map">
                 <div class="row">
-                    <div class="col-2 col-md-3 class-room-available border border-dark rounded">
+                    <div class="col-2 col-md-3 class-room-available border border-2 border-dark rounded">
                         <p class="room-name-title">AIP S111</p>
                         <hr>
                         <p>
@@ -138,10 +141,10 @@
                         </p>
                         <p>
                             <i class="fa-solid fa-droplet ms-2"></i>: <span id="Humidity-display-AIP_S111"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
-                            <i class="fas fa-volume-down ms-4"></i>: <span id="Sound-display-AIP_S111"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fas fa-volume-down ms-3"></i>: <span id="Sound-display-AIP_S111"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                     </div>
-                    <div class="col-3 col-md-3 class-room-available border border-dark rounded">
+                    <div class="col-3 col-md-3 class-room-available border-bottom border-end border-start border-2 border-dark rounded">
                         <p class="room-name-title">AIP S112</p>
                         <hr>
                         <p>
@@ -153,7 +156,7 @@
                             <i class="fas fa-volume-down ms-4"></i>: <span id="Sound-display-AIP_S112"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                     </div>
-                    <div class="col-3 col-md-3 class-room-available border border-dark rounded">
+                    <div class="col-3 col-md-3 class-room-available border border-2 border-dark rounded">
                         <p class="room-name-title">AIP S114</p>
                         <hr>
                         <p>
@@ -165,37 +168,55 @@
                             <i class="fas fa-volume-down ms-4"></i>: <span id="Sound-display-AIP_S114"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                     </div>
-                    <div class="col-3 col-md-3 border-left border-top border-right border-dark text-right help-text fw-bold hallway rounded">
+                    <div class="col-3 col-md-3 border-left border-top border-dark text-right help-text fw-bolder hallway rounded">
                         Entrance
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-3 col-md-2 class-room-available border border-dark rounded">
+                    <div class="col-3 col-md-2 class-room-available border border-2 border-dark rounded">
                         <p class="room-name-title">AIP S110</p>
                         <hr>
                         <p>
-                            <i class="fa fa-thermometer-full ms-1" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
-                            <i class="fas fa-sun ms-2"></i>: <span id="Light-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fas fa-sun"></i>: <span id="Light-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                         <p>
-                            <i class="fa-solid fa-droplet ms-1"></i>: <span id="Humidity-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
-                            <i class="fas fa-volume-down ms-3"></i>: <span id="Sound-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fas fa-volume-down"></i>: <span id="Sound-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                     </div>
                     <div class="col-3 col-md-2 hallway"></div>
                     <div class="col-3 col-md-8 hallway">
                         <div class="row h-50">
-                            <div class="col-3 col-md-12 help-text fw-bold hallway border-right border-dark rounded">Hallway</div>
+                            <div class="col-3 col-md-12 help-text fw-bolder hallway">Hallway</div>
                         </div>
                         <div class="row h-50">
-                            <div class="col-3 col-md-3 class-room-available border border-dark rounded">
-                                <p class="room-name-title">AIP S102</p>
+                            <div class="col-3 col-md-3 class-room-available border border-2 border-dark rounded">
+                                <p class="room-name-title"
+                                role="button"
+                                tabindex="0"
+                                data-bs-toggle="popover-aipS102"
+                                data-trigger="focus"
+                                href="#"
+                                title="AIP S102"
+                                data-popover-content='#aipS102'
+                                >AIP S102</p>
                                 <hr>
-                                <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S110"><i class="fa-solid fa-ellipsis fa-fade"></i></span></p>
-                                <p><i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-AIP_S111">Loading...</span></p>
+                                <div style="display:none;" id="aipS102">
+                                    <p>
+                                        <i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S102"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                                        <i class="fas fa-sun"></i>: <span id="Light-display-AIP_S102"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-AIP_S102"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                                        <i class="fas fa-volume-down"></i>: <span id="Sound-display-AIP_S102"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="col-3 col-md-3 outside border-top border-dark rounded"></div>
+                            <div class="col-3 col-md-3 outside border-top border-dark rounded text-right help-text fw-bolder">
+                                Garden
+                            </div>
                             <div class="col-3 col-md-6 bg-white border-left border-right border-dark rounded">
                                 <div class="row h-100">
                                     <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
@@ -208,31 +229,31 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-3 col-md-2 class-room-available border border-round border-dark rounded">
+                    <div class="col-3 col-md-2 class-room-available border-top border-start border-end border-round border-dark rounded">
                         <p class="room-name-title">AIP S108</p>
                         <hr>
                         <p>
-                            <i class="fa fa-thermometer-full ms-1" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
-                            <i class="fas fa-sun ms-2"></i>: <span id="Light-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fas fa-sun ms-1"></i>: <span id="Light-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                         <p>
-                            <i class="fa-solid fa-droplet ms-1"></i>: <span id="Humidity-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
-                            <i class="fas fa-volume-down ms-3"></i>: <span id="Sound-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fas fa-volume-down ms-1"></i>: <span id="Sound-display-AIP_S108"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                     </div>
-                    <div class="col-3 col-md-2 class-room-available border border-dark rounded ideal-room">
+                    <div class="col-3 col-md-2 class-room-available border-top border-start border-end border-2 border-dark rounded">
                         <p class="room-name-title">AIP S106</p>
                         <hr>
                         <p>
                             <i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S106"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
-                            <i class="fas fa-sun ms-2"></i>: <span id="Light-display-AIP_S106"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fas fa-sun"></i>: <span id="Light-display-AIP_S106"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                         <p>
                             <i class="fa-solid fa-droplet"></i>: <span id="Humidity-display-AIP_S106"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
-                            <i class="fas fa-volume-down ms-2"></i>: <span id="Sound-display-AIP_S106"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
+                            <i class="fas fa-volume-down"></i>: <span id="Sound-display-AIP_S106"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                     </div>
-                    <div class="col-3 col-md-2 class-room-available border border-dark rounded">
+                    <div class="col-3 col-md-2 class-room-available border-top border-end border-2 border-dark rounded">
                         <p class="room-name-title">AIP S104</p>
                         <hr>
                         <p>
@@ -244,12 +265,12 @@
                             <i class="fas fa-volume-down ms-2"></i>: <span id="Sound-display-AIP_S104"><i class="fa-solid fa-ellipsis fa-fade"></i></span>
                         </p>
                     </div>
-                    <div class="col-3 col-md-2 outside"></div>
+                    <div class="col-3 col-md-2 outside border-bottom border-white"></div>
                     <div class="col-3 col-md-4 bg-white border-left border-bottom border-right border-dark rounded">
                         <div class="row h-100">
                             <div class="col-3 col-md-5 other-room border border-dark rounded"></div>
                             <div class="col-3 col-md-2 hallway"></div>
-                            <div class="col-3 col-md-5 class-room-available border border-dark rounded">
+                            <div class="col-3 col-md-5 class-room-available border border-2 border-dark rounded">
                                 <p class="room-name-title">AIP S215</p>
                                 <hr>
                                 <p><i class="fa fa-thermometer-full" aria-hidden="true"></i>: <span id="Temperature-display-AIP_S215"><i class="fa-solid fa-ellipsis fa-fade"></i></span></p>
@@ -258,9 +279,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="picture-map">
-                <img class="img-fluid" src={% static 'dashboard/images/floor_plan.jpeg' %} alt="Avatar">
             </div>
         </div>
         <div class="container col-3 col-md-2 border border-3 border-dark rounded-3">

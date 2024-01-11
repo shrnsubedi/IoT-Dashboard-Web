@@ -1,68 +1,97 @@
 {% extends 'dashboard/base.html' %} {% block content %}
-<h1> Preferences </h1>
 <div class="container mt-4">
-    <h2 class="mb-4">Set Preferences</h2>
-    <form method="post" id="preferencesForm">
+    <div class="row">
+      <div class="col-md-6">
+          <h2 class="mb-4">Set Your Preferences</h2>
+          <form method="post" id="preferencesForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="temperature">Temperature °C</label>
+                <input type="number" class="form-control" id="temperature" name="temperature" step="any" value="{{ initial_data.Temperature.0 }}">
+                <small class="form-text text-muted">Enter the value for Temperature.</small>
+              </div>
 
-      <div class="form-row">
-        <div class="col-md-6 mb-3">
-          <label for="temperature">Temperature Value:</label>
-          <input type="number" class="form-control" id="temperature" name="temperature" step="any" value="{{ initial_data.Temperature.0 }}">
-          <small class="form-text text-muted">Enter the value for Temperature.</small>
+              <div class="col-md-6 mb-3">
+                <label for="temperature_importance">How important is Temperature to you?</label>
+                <select class="form-control" id="temperature_importance" name="temperature_importance">
+                  <option value="1" {% if initial_data.Temperature.1 == 1 %}selected{% endif %}>Not Important</option>
+                  <option value="2" {% if initial_data.Temperature.1 == 2 %}selected{% endif %}>Neutral</option>
+                  <option value="3" {% if initial_data.Temperature.1 == 3 %}selected{% endif %}>Very Important</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="humidity">Humidity %</label>
+                <input type="number" class="form-control" id="humidity" name="humidity" step="any" value="{{ initial_data.Humidity.0 }}">
+                <small class="form-text text-muted">Enter the value for Humidity.</small>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="humidity_importance">How important is Humidity to you?</label>
+                <select class="form-control" id="humidity_importance" name="humidity_importance">
+                  <option value="1" {% if initial_data.Humidity.1 == 1 %}selected{% endif %}>Not Important</option>
+                  <option value="2" {% if initial_data.Humidity.1 == 2 %}selected{% endif %}>Neutral</option>
+                  <option value="3" {% if initial_data.Humidity.1 == 3 %}selected{% endif %}>Very Important</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label for="sound_importance">How important is a quiet room to you?</label>
+                <select class="form-control" id="sound_importance" name="sound_importance">
+                  <option value="1" {% if initial_data.Sound.1 == 1 %}selected{% endif %}>Not Important</option>
+                  <option value="2" {% if initial_data.Sound.1 == 2 %}selected{% endif %}>Neutral</option>
+                  <option value="3" {% if initial_data.Sound.1 == 3 %}selected{% endif %}>Very Important</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label for="light_importance">How important is a well-lit room to you?</label>
+                <select class="form-control" id="light_importance" name="light_importance">
+                  <option value="1" {% if initial_data.Light.1 == 1 %}selected{% endif %}>Not Important</option>
+                  <option value="2" {% if initial_data.Light.1 == 2 %}selected{% endif %}>Neutral</option>
+                  <option value="3" {% if initial_data.Light.1 == 3 %}selected{% endif %}>Very Important</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mt-4" onclick="savePreferences()">Save Preferences</button>
+          </form>
+      </div>
+      <div class="col-md-6 border-start">
+        <h2>Confused?</h2>
+        <p> Here are some recommended values for each metric:
+        <div style="background: #FAFAD2;" class="card mb-3 text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Temperature  <i class="fa fa-thermometer-full" aria-hidden="true"></i></h5>
+                <p class="card-text">20°C - 22°C (68°F - 72°F)</p>
+            </div>
         </div>
-
-        <div class="col-md-6 mb-3">
-          <label for="temperature_importance">How important is Temperature to you?</label>
-          <select class="form-control" id="temperature_importance" name="temperature_importance">
-            <option value="1" {% if initial_data.Temperature.1 == 1 %}selected{% endif %}>Not Important</option>
-            <option value="2" {% if initial_data.Temperature.1 == 2 %}selected{% endif %}>Neutral</option>
-            <option value="3" {% if initial_data.Temperature.1 == 3 %}selected{% endif %}>Very Important</option>
-          </select>
+        <div style="background: #FAFAD2;" class="card mb-3 text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Humidity <i class="fa-solid fa-droplet" aria-hidden="true"></i></h5>
+                <p class="card-text">30% - 50%</p>
+            </div>
+        </div>
+        <div style="background: #FAFAD2;" class="card mb-3 text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Sound <i class="fas fa-volume-down" aria-hidden="true"></i></h5>
+                <p class="card-text">Less than 35 dB in quiet rooms</p>
+            </div>
+        </div>
+        <div style="background: #FAFAD2;" class="card mb-3 text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Brightness <i class="fas fa-sun" aria-hidden="true"></i></h5>
+                <p class="card-text">It is recommended to be in a well-lit room for prolonged hours</p>
+            </div>
         </div>
       </div>
-
-      <div class="form-row">
-        <div class="col-md-6 mb-3">
-          <label for="humidity">Humidity Value:</label>
-          <input type="number" class="form-control" id="humidity" name="humidity" step="any" value="{{ initial_data.Humidity.0 }}">
-          <small class="form-text text-muted">Enter the value for Humidity.</small>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label for="humidity_importance">How important is Humidity to you?</label>
-          <select class="form-control" id="humidity_importance" name="humidity_importance">
-            <option value="1" {% if initial_data.Humidity.1 == 1 %}selected{% endif %}>Not Important</option>
-            <option value="2" {% if initial_data.Humidity.1 == 2 %}selected{% endif %}>Neutral</option>
-            <option value="3" {% if initial_data.Humidity.1 == 3 %}selected{% endif %}>Very Important</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="col-md-6 mb-3">
-          <label for="light_importance">How important is Light to you?</label>
-          <select class="form-control" id="light_importance" name="light_importance">
-            <option value="1" {% if initial_data.Light.1 == 1 %}selected{% endif %}>Not Important</option>
-            <option value="2" {% if initial_data.Light.1 == 2 %}selected{% endif %}>Neutral</option>
-            <option value="3" {% if initial_data.Light.1 == 3 %}selected{% endif %}>Very Important</option>
-          </select>
-        </div>
     </div>
-
-      <div class="form-row">
-        <div class="col-md-6 mb-3">
-          <label for="sound_importance">How important is Sound to you?</label>
-          <select class="form-control" id="sound_importance" name="sound_importance">
-            <option value="1" {% if initial_data.Sound.1 == 1 %}selected{% endif %}>Not Important</option>
-            <option value="2" {% if initial_data.Sound.1 == 2 %}selected{% endif %}>Neutral</option>
-            <option value="3" {% if initial_data.Sound.1 == 3 %}selected{% endif %}>Very Important</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-      <button type="button" class="btn btn-primary" onclick="savePreferences()">Save Preferences</button>
-    </form>
 </div>
 
   <script>
