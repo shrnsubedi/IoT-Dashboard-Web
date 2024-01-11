@@ -26,19 +26,17 @@ def get_latest_readings():
 
 
 def get_room_rankings(latest_readings, user):
-    if not user.is_authenticated:
-        return None
+    preferences = {
+        "Light": [500, 3],
+        "Sound": [40, 3],
+        "Humidity": [54, 3],
+        "Temperature": [12, 3],
+    }
 
-    preferences_obj = Preferences.objects.filter(user=user).first()
-
-    if not preferences_obj:
-        return None
-
-    preferences = preferences_obj.value
-
-    if not preferences:
-        return None
-
+    if user.is_authenticated:
+        preference_obj = Preferences.objects.filter(user=user).first()
+        if preference_obj:
+            preferences = preference_obj.value
     sensor_names = preferences.keys()
 
     room_rankings = []

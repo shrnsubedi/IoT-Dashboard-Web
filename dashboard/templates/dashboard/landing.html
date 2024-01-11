@@ -123,7 +123,7 @@
     <div class="row">
         <div class="col-12 border-dark">
             <p>Welcome to AIP,</p>
-            <p>Select a room, or set your preferences to find the best room for you</p>
+            <p>Select the ideal room for you, or set your preferences to find the best room according to your criteria</p>
     </div>
 </div>
 
@@ -282,7 +282,11 @@
             </div>
         </div>
         <div class="container col-3 col-md-2 border border-3 border-dark rounded-3">
+            {% if user.is_authenticated %}
             <h2>Your <i id="ranking-animation" class="fa-solid fa-ranking-star" style="color: #0d0e07;"></i></h2><span>
+            {% else %}
+            <h2>Room <i id="ranking-animation" class="fa-solid fa-ranking-star" style="color: #0d0e07;"></i></h2>
+            {% endif %}
             <div id="room-rankings">
             </div>
         </div>
