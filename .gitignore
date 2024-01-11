@@ -7,3 +7,6 @@ __pycache__/
 
 # Mac/OSX
 .DS_Store
+
+rooms_data/
+migration_script.py
