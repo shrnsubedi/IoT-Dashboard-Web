@@ -1,4 +1,8 @@
-from sensor.models import Preferences, Room, Sensor, SensorReading
+from functools import wraps
+
+from django.http import JsonResponse
+
+from sensor.models import APIKey, Preferences, Room, Sensor, SensorReading
 
 
 def get_latest_readings():
@@ -52,3 +56,18 @@ def get_room_rankings(latest_readings, user):
 
     sorted_rooms = sorted(room_rankings, key=lambda x: x["score"])
     return sorted_rooms
+
+
+# Decorator to check api-key
+def token_required(f):
+    @wraps(f)
+    def decorated_function(request):
+        token = request.headers.get("Token")
+        api_key = APIKey.objects.first()
+
+        if not token or token != api_key.key:
+            return JsonResponse({"message": "Unauthorized"}, status=401)
+
+        return f(request)
+
+    return decorated_function

@@ -17,9 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from sensor.views import sensor_readings_api
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("user.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", include("dashboard.urls")),
+    path(
+        "api/sensor_readings/",
+        sensor_readings_api,
+        name="sensor_readings_api",
+    ),
 ]

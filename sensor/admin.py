@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.utils import timezone
 
 # Register your models here.
-from sensor.models import Preferences, Room, Sensor, SensorReading
+from sensor.models import APIKey, Preferences, Room, Sensor, SensorReading
 
 
 class SensorModelAdmin(admin.ModelAdmin):
@@ -46,3 +46,4 @@ admin.site.register(Sensor, SensorModelAdmin)
 admin.site.register(SensorReading)
 admin.site.register(Room, RoomAdmin)
 admin.site.register(Preferences)
+admin.site.register(APIKey)

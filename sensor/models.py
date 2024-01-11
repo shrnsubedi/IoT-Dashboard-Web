@@ -54,3 +54,8 @@ class Preferences(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user}-preferences"
+
+
+class APIKey(models.Model):
+    organization = models.CharField(max_length=50)
+    key = models.CharField(max_length=50)
