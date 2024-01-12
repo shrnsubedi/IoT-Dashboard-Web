@@ -31,10 +31,10 @@ def get_latest_readings():
 
 def get_room_rankings(latest_readings, user):
     preferences = {
-        "Light": [500, 3],
-        "Sound": [40, 3],
-        "Humidity": [54, 3],
-        "Temperature": [12, 3],
+        "Light": [400, 3],
+        "Sound": [55, 3],
+        "Humidity": [50, 3],
+        "Temperature": [22, 3],
     }
 
     if user.is_authenticated:
