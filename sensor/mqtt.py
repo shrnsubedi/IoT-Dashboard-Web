@@ -30,7 +30,9 @@ def create_reading(msg):
     time, room, sensor_values = parse_message(msg)
     room = Room.objects.filter(name=room).first()
     for key, value in sensor_values.items():
-        sensor = Sensor.objects.filter(name=key, room=room).first()
+        sensor = Sensor.objects.filter(name=key, room=room, is_active=True).first()
+        if not sensor:
+            continue
         SensorReading.objects.create(time=time, value=value, sensor=sensor)
     return 1
 

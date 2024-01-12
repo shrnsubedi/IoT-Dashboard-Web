@@ -20,16 +20,16 @@
 
         function getSensorValueMapping(name, value){
             if(name === "Sound"){
-                return value + "dB"
+                return Math.round(value); + "dB"
             }
             if(name === "Light"){
                 return getLightMapping(value)
             }
             if(name === "Temperature"){
-                return value + "°C"
+                return Math.round(value)+ "°C"
             }
             if(name === "Humidity"){
-                return value + "%"
+                return Math.round(value) + "%"
             }
         }
 
