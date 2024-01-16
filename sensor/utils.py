@@ -31,10 +31,10 @@ def get_latest_readings():
 
 def get_room_rankings(latest_readings, user):
     preferences = {
-        "Light": [400, 3],
-        "Sound": [55, 3],
-        "Humidity": [50, 3],
-        "Temperature": [22, 3],
+        "Light": [400, 1],
+        "Sound": [55, 1],
+        "Humidity": [50, 1],
+        "Temperature": [22, 1],
     }
 
     if user.is_authenticated:
@@ -44,16 +44,14 @@ def get_room_rankings(latest_readings, user):
     sensor_names = preferences.keys()
 
     room_rankings = []
-
     for room_name, room_data in latest_readings.items():
         score = sum(
-            abs(1 - room_data[sensor_name]["value"] / preferences[sensor_name][0])
+            abs(1 - ((room_data[sensor_name]["value"]) / preferences[sensor_name][0]))
             * preferences[sensor_name][1]
             for sensor_name in sensor_names
             if sensor_name in room_data
         )
         room_rankings.append({"room": room_name, "score": score})
-
     sorted_rooms = sorted(room_rankings, key=lambda x: x["score"])
     return sorted_rooms
 
