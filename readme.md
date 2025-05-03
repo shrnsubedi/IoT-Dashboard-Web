@@ -1,6 +1,6 @@
 # Project Introduction
 
-IoT dashboard is a...
+IoT dashboard is a project for the module 'IoT' in Masters 'Green Networking and Cloud Computing'
 
 # Pre-requisites
 
